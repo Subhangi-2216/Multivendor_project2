@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "855760917639",
+    "project_id": "subhangi-multivendor-store",
+    "storage_bucket": "subhangi-multivendor-store.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:855760917639:android:bab4249f4464e04a155422",
+        "android_client_info": {
+          "package_name": "com.subhangi.multivendor_ecommerce_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv68FG04USivK16BSGwT5D5ccfgZmRgUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

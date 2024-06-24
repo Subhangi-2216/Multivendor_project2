@@ -1,6 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:multivendor_ecommerce_app/views/buyers/nav_screens/account_screen.dart';
+import 'package:multivendor_ecommerce_app/views/buyers/nav_screens/cart_screen.dart';
+import 'package:multivendor_ecommerce_app/views/buyers/nav_screens/category_screen.dart';
+import 'package:multivendor_ecommerce_app/views/buyers/nav_screens/home_screen.dart';
+import 'package:multivendor_ecommerce_app/views/buyers/nav_screens/search_screen.dart';
+import 'package:multivendor_ecommerce_app/views/buyers/nav_screens/store_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -11,19 +17,29 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _pageIndex = 0;
+
+  List<Widget> _pages = [
+    HomeScreen(),
+    CategoryScreen(),
+    StoreScreen(),
+    CartScreen(),
+    SearchScreen(),
+    AccountScreen(),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         // type: BottomNavigationBarType.fixed,
+        //bottomnavbar horizontally moves, if want to remove it then do fixed
         currentIndex: _pageIndex,
-        onTap: (value){
+        onTap: (value) {
           setState(() {
             _pageIndex = value;
           });
         },
         unselectedItemColor: Colors.black,
-        selectedItemColor: Colors.yellow.shade900,
+        selectedItemColor: Colors.black,
         items: [
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.home),
@@ -66,6 +82,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
+      body: _pages[_pageIndex], //to display home screens.
     );
   }
 }
