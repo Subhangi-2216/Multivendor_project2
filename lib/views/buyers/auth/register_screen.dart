@@ -1,4 +1,8 @@
+import 'dart:typed_data';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:multivendor_ecommerce_app/controllers/auth_controller.dart';
 import 'package:multivendor_ecommerce_app/utils/show_snackbar.dart';
 import 'package:multivendor_ecommerce_app/views/buyers/auth/login_screen.dart';
@@ -22,16 +26,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   late String password;
 
+  bool _isLoading = false;
+
+  Uint8List? _image;
+
   _signUpUser() async {
-    if(_formKey.currentState!.validate()){
-        await _authController.signUpUsers(
-        email, fullName, phoneNumber, password);
+    setState(() {
+      _isLoading = true;
+    });
+    if (_formKey.currentState!.validate()) {
+      await _authController
+          .signUpUsers(email, fullName, phoneNumber, password, _image)
+          .whenComplete(() {
+        setState(() {
+          _formKey.currentState!.reset();
+          _isLoading = false;
+        });
+      });
 
-        return showSnack(context, 'Congratulations an account has been created for you!');
-
-    } else{
+      return showSnack(
+          context, 'Congratulations an account has been created for you!');
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
       return showSnack(context, 'Please field must not be empty');
     }
+  }
+
+  selectGalleryImage() async {
+    Uint8List im = await _authController.pickProfileImage(ImageSource.gallery);
+
+    setState(() {
+      _image = im;
+    });
+  }
+
+  selectCameraImage() async {
+    Uint8List im = await _authController.pickProfileImage(ImageSource.camera);
+
+    setState(() {
+      _image = im;
+    });
   }
 
   @override
@@ -48,10 +84,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   'Create Customer Account',
                   style: TextStyle(fontSize: 20),
                 ),
-                // CircleAvatar(
-                //   radius: 64,
-                //   backgroundColor: Color.fromARGB(255, 241, 188, 142),
-                // ),
+                Stack(
+                  children: [
+                    _image != null
+                        ? CircleAvatar(
+                            radius: 64,
+                            backgroundColor: Color.fromARGB(255, 241, 188, 142),
+                            backgroundImage: MemoryImage(_image!),
+                          )
+                        : CircleAvatar(
+                            radius: 64,
+                            backgroundColor: Color.fromARGB(255, 241, 188, 142),
+                            backgroundImage: NetworkImage(
+                                'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'),
+                          ),
+                    Positioned(
+                      right: 5,
+                      top: 5,
+                      child: IconButton(
+                        onPressed: () {
+                          selectGalleryImage();
+                        },
+                        icon: Icon(
+                          CupertinoIcons.photo,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 Padding(
                   padding: const EdgeInsets.all(13.0),
                   child: TextFormField(
@@ -109,6 +170,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Padding(
                   padding: const EdgeInsets.all(13.0),
                   child: TextFormField(
+                    obscureText: true,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Password must not be empty';
@@ -136,15 +198,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(
-                        child: Text(
-                      'Register',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 19,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 3,
-                      ),
-                    )),
+                        child: _isLoading
+                            ? CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : Text(
+                                'Register',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 3,
+                                ),
+                              )),
                   ),
                 ),
                 Row(
