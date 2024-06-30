@@ -8,12 +8,12 @@ import 'package:multivendor_ecommerce_app/utils/show_snackbar.dart';
 import 'package:multivendor_ecommerce_app/views/buyers/auth/login_screen.dart';
 
 // ignore: must_be_immutable
-class RegisterScreen extends StatefulWidget {
+class BuyerRegisterScreen extends StatefulWidget {
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<BuyerRegisterScreen> createState() => _BuyerRegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _BuyerRegisterScreenState extends State<BuyerRegisterScreen> {
   final AuthController _authController = AuthController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
