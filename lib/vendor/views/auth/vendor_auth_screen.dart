@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multivendor_ecommerce_app/vendor/models/vendor_user_models.dart';
+import 'package:multivendor_ecommerce_app/vendor/views/screens/main_vendor_screen.dart';
 import 'package:multivendor_ecommerce_app/vendor/views/screens/landing_screen.dart';
 
 class VendorAuthScreen extends StatelessWidget {
@@ -8,22 +11,48 @@ class VendorAuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      // If the user is already signed-in, use it as initial data
-      initialData: FirebaseAuth.instance.currentUser,
-      builder: (context, snapshot) {
-        // User is not signed in
-        if (!snapshot.hasData) {
-          return SignInScreen(
-            providers: [
-              EmailAuthProvider(),
-            ],
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final CollectionReference _vendorsStream =
+        FirebaseFirestore.instance.collection('vendors');
+    // print("Hello worldddddd");
+
+    return Scaffold(
+      body: StreamBuilder<User?>(
+        stream: _auth.authStateChanges(),
+        initialData: _auth.currentUser,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return SignInScreen(
+              providers: [
+                EmailAuthProvider(),
+              ],
+            );
+          }
+
+          return FutureBuilder<DocumentSnapshot>(
+            future: _vendorsStream.doc(_auth.currentUser!.uid).get(),
+            builder: (context, vendorSnapshot) {
+              if (vendorSnapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (vendorSnapshot.hasError) {
+                return Center(child: Text('Something went wrong'));
+              }
+
+              if (vendorSnapshot.data?.exists ?? false) {
+                VendorUserModel vendorUserModel = VendorUserModel.fromJson(
+                    vendorSnapshot.data!.data()! as Map<String, dynamic>);
+
+                if (vendorUserModel.approved == true) {
+                  return MainVendorScreen();
+                }
+              }
+
+              return LandingScreen();
+            },
           );
-        }
-        // Render your application if authenticated
-        return LandingScreen();
-      },
+        },
+      ),
     );
   }
 }

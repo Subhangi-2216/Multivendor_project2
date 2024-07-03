@@ -38,8 +38,10 @@ class _MainScreenState extends State<MainScreen> {
             _pageIndex = value;
           });
         },
-        unselectedItemColor: Colors.black,
-        selectedItemColor: Colors.black,
+        unselectedItemColor: Color.fromARGB(255, 245, 167, 99),
+
+        selectedItemColor: Color.fromARGB(255, 245, 167, 99),
+
         items: [
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.home),
@@ -48,6 +50,7 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               'assets/icons/explore.svg',
+              color: Color.fromARGB(255, 245, 167, 99),
               width: 20,
             ),
             label: 'CATEGORIES',
@@ -55,6 +58,7 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               'assets/icons/shop.svg',
+              color: Color.fromARGB(255, 245, 167, 99),
               width: 20,
             ),
             label: 'STORE',
@@ -62,6 +66,7 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               'assets/icons/cart.svg',
+              color: Color.fromARGB(255, 245, 167, 99),
               width: 20,
             ),
             label: 'CART',
@@ -69,12 +74,14 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               'assets/icons/search.svg',
+              color: Color.fromARGB(255, 245, 167, 99),
               width: 20,
             ),
             label: 'SEARCH',
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
+              color: Color.fromARGB(255, 245, 167, 99),
               'assets/icons/account.svg',
               width: 20,
             ),

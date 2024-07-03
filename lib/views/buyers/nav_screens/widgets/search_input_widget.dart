@@ -14,7 +14,7 @@ class SearchInputWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(25),
         child: TextField(
           decoration: InputDecoration(
-              fillColor:  Colors.white,
+              fillColor:  Color.fromARGB(255, 241, 188, 142),
               filled: true,
               hintText: 'Search For Products',
               border: OutlineInputBorder(

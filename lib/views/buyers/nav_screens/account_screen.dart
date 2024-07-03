@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multivendor_ecommerce_app/views/buyers/auth/login_screen.dart';
+import 'package:multivendor_ecommerce_app/views/buyers/inner_screens/edit_profile.dart';
 
 class AccountScreen extends StatelessWidget {
-  const AccountScreen({super.key});
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,7 @@ class AccountScreen extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(2.0),
                   child: Text(
                     data['fullName'],
                     style: TextStyle(
@@ -62,12 +64,43 @@ class AccountScreen extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(2.0),
                   child: Text(
                     data['email'],
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return EditPRofileScreen(
+                         userData: data,
+                      );
+                    }));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 40,
+                      width: MediaQuery.of(context).size.width - 290,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 241, 188, 142),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Edit Profile',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                            letterSpacing: 1,
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -95,6 +128,14 @@ class AccountScreen extends StatelessWidget {
                   title: Text('Orders'),
                 ),
                 ListTile(
+                  onTap: () async {
+                    await _auth.signOut().whenComplete(() {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return LoginScreen();
+                      }));
+                    });
+                  },
                   leading: Icon(Icons.logout),
                   title: Text('Logout'),
                 ),
@@ -103,7 +144,7 @@ class AccountScreen extends StatelessWidget {
           );
         }
 
-        return CircularProgressIndicator();
+        return Center(child: CircularProgressIndicator());
       },
     );
   }

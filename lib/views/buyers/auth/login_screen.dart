@@ -110,13 +110,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Center(
                     child: _isLoading
                         ? CircularProgressIndicator(
-                            color: Colors.white,
+                            color: Colors.black,
                           )
                         : Text(
                             'Login',
                             style: TextStyle(
                               letterSpacing: 5,
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                           ),
                   ),

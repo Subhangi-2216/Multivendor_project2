@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -10,7 +9,8 @@ class WelcomeText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top, left: 25, right: 15),
+      padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top, left: 25, right: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -19,6 +19,7 @@ class WelcomeText extends StatelessWidget {
           Container(
             child: SvgPicture.asset(
               'assets/icons/cart.svg',
+               color: Color.fromARGB(255, 222, 114, 20),
               width: 20,
             ),
           )

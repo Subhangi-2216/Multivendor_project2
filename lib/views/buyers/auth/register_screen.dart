@@ -107,7 +107,7 @@ class _BuyerRegisterScreenState extends State<BuyerRegisterScreen> {
                         },
                         icon: Icon(
                           CupertinoIcons.photo,
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
                       ),
                     ),
@@ -200,12 +200,12 @@ class _BuyerRegisterScreenState extends State<BuyerRegisterScreen> {
                     child: Center(
                         child: _isLoading
                             ? CircularProgressIndicator(
-                                color: Colors.white,
+                                color: Colors.black,
                               )
                             : Text(
                                 'Register',
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontSize: 19,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 3,

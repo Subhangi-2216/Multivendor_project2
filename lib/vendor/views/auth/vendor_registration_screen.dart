@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_final_fields
-
 import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -7,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multivendor_ecommerce_app/vendor/controllers/vendor_register_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class VendorRegistrationScreen extends StatefulWidget {
   @override
@@ -19,24 +18,15 @@ class _VendorRegistrationScreenState extends State<VendorRegistrationScreen> {
 
   final VendorController _vendorController = VendorController();
   late String countryValue;
-
   late String bussinessName;
-
-  late String email;
-
   late String phoneNumber;
-
   String taxNumber = "";
-
   late String stateValue;
-
   late String cityValue;
-
   Uint8List? _image;
 
   selectGalleryImage() async {
     Uint8List? im = await _vendorController.pickStoreImage(ImageSource.gallery);
-
     setState(() {
       _image = im;
     });
@@ -44,64 +34,46 @@ class _VendorRegistrationScreenState extends State<VendorRegistrationScreen> {
 
   selectCameraImage() async {
     Uint8List? im = await _vendorController.pickStoreImage(ImageSource.camera);
-
     setState(() {
       _image = im;
     });
   }
 
   String? _taxStatus;
-
   List<String> _taxOptions = [
     'YES',
     'NO',
   ];
 
-  // _saveVendorDetail() async {
-  //   EasyLoading.show(status: 'PLEASE WAIT');
-  //   if (_formKey.currentState!.validate()) {
-  //     await _vendorController
-  //         .registerVendor(bussinessName, email, phoneNumber, countryValue,
-  //             stateValue, cityValue, _taxStatus!, taxNumber, _image)
-  //         .whenComplete(() {
-  //       EasyLoading.dismiss();
-
-  //       setState(() {
-  //         _formKey.currentState!.reset();
-
-  //         _image = null;
-  //       });
-  //     });
-  //   } else {
-  //     print('bad');
-
-  //     EasyLoading.dismiss();
-  //   }
-  // }
-
   _saveVendorDetail() async {
     EasyLoading.show(status: 'PLEASE WAIT');
     if (_formKey.currentState!.validate()) {
-      String res = await _vendorController.registerVendor(
-        bussinessName,
-        email,
-        phoneNumber,
-        countryValue,
-        stateValue,
-        cityValue,
-        _taxStatus!,
-        taxNumber,
-        _image,
-      );
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        String email = user.email!;
+        String res = await _vendorController.registerVendor(
+          bussinessName,
+          email,
+          phoneNumber,
+          countryValue,
+          stateValue,
+          cityValue,
+          _taxStatus!,
+          taxNumber,
+          _image,
+        );
 
-      if (res == 'success') {
-        EasyLoading.showSuccess('Vendor Registered Successfully');
-        _formKey.currentState!.reset();
-        setState(() {
-          _image = null;
-        });
+        if (res == 'success') {
+          EasyLoading.showSuccess('Vendor Registered Successfully');
+          _formKey.currentState!.reset();
+          setState(() {
+            _image = null;
+          });
+        } else {
+          EasyLoading.showError('Registration Failed: $res');
+        }
       } else {
-        EasyLoading.showError('Registration Failed: $res');
+        EasyLoading.showError('User not authenticated');
       }
       EasyLoading.dismiss();
     } else {
@@ -136,9 +108,7 @@ class _VendorRegistrationScreenState extends State<VendorRegistrationScreen> {
                           width: 90,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(
-                              10,
-                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           child: _image != null
                               ? Image.memory(_image!)
@@ -168,50 +138,29 @@ class _VendorRegistrationScreenState extends State<VendorRegistrationScreen> {
                       },
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Please Bussiness Name must not be empty';
+                          return 'Please Business Name must not be empty';
                         } else {
                           return null;
                         }
                       },
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
-                        labelText: 'Bussiness Name',
+                        labelText: 'Business Name',
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
+                    SizedBox(height: 10),
                     TextFormField(
-                      onChanged: (value) {
-                        email = value;
-                      },
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please Email Address Must not be empty';
-                        } else {
-                          return null;
-                        }
-                      },
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        labelText: 'Email Address',
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
+                      keyboardType: TextInputType.number,
                       onChanged: (value) {
                         phoneNumber = value;
                       },
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Please Phone Number Must not be empty';
+                          return 'Please Phone Number must not be empty';
                         } else {
                           return null;
                         }
                       },
-                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         labelText: 'Phone Number',
                       ),
@@ -273,17 +222,20 @@ class _VendorRegistrationScreenState extends State<VendorRegistrationScreen> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: TextFormField(
+                          keyboardType: TextInputType.number,
                           onChanged: (value) {
                             taxNumber = value;
                           },
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Please Tax Number Must not be empty';
+                              return 'Please Tax Number must not be empty';
                             } else {
                               return null;
                             }
                           },
-                          decoration: InputDecoration(labelText: 'Tax Number'),
+                          decoration: InputDecoration(
+                            labelText: 'Tax Number',
+                          ),
                         ),
                       ),
                     InkWell(
@@ -321,3 +273,19 @@ class _VendorRegistrationScreenState extends State<VendorRegistrationScreen> {
     );
   }
 }
+
+//                     SizedBox(height: 20),
+//                     ElevatedButton(
+//                       onPressed: _saveVendorDetail,
+//                       child: Text('Register'),
+//                     )
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }

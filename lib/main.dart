@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:multivendor_ecommerce_app/provider/cart_provider.dart';
 import 'package:multivendor_ecommerce_app/provider/product_provider.dart';
-import 'package:multivendor_ecommerce_app/vendor/views/screens/main_vendor_screen.dart';
+import 'package:multivendor_ecommerce_app/vendor/views/auth/vendor_auth_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -18,7 +20,10 @@ void main() async {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) {
       return ProductProvider();
-    })
+    }),
+    ChangeNotifierProvider(create: (_) {
+      return CartProvider();
+    }),
   ], child: const MyApp()));
 }
 
@@ -35,7 +40,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Brand-Bold',
       ),
-      home: MainVendorScreen(),
+      home: VendorAuthScreen(),
+      builder: EasyLoading.init(),
     );
   }
 }
