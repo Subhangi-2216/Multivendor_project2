@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +28,7 @@ class VendorOrderScreen extends StatelessWidget {
           title: Text(
             'My Orders',
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.bold,
               letterSpacing: 5,
@@ -47,7 +45,9 @@ class VendorOrderScreen extends StatelessWidget {
 
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
-                child: CircularProgressIndicator(color: Color.fromARGB(255, 241, 188, 142),),
+                child: CircularProgressIndicator(
+                  color: Color.fromARGB(255, 241, 188, 142),
+                ),
               );
             }
 
@@ -66,8 +66,9 @@ class VendorOrderScreen extends StatelessWidget {
                           title: document['accepted'] == true
                               ? Text(
                                   'Accepted',
-                                  style:
-                                      TextStyle(color: Color.fromARGB(255, 241, 188, 142),),
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 241, 188, 142),
+                                  ),
                                 )
                               : Text(
                                   'Not Accepted',
@@ -103,7 +104,7 @@ class VendorOrderScreen extends StatelessWidget {
                           subtitle: Text('View Order Details'),
                           children: [
                             ListTile(
-                              leading: CircleAvatar(
+                              leading: CircleAvatar( //left and trailing is right
                                 child: Image.network(
                                   document['productImage'][0],
                                 ),

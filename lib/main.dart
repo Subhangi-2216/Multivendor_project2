@@ -5,6 +5,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:multivendor_ecommerce_app/provider/cart_provider.dart';
 import 'package:multivendor_ecommerce_app/provider/product_provider.dart';
 import 'package:multivendor_ecommerce_app/vendor/views/auth/vendor_auth_screen.dart';
+import 'package:multivendor_ecommerce_app/views/buyers/auth/register_screen.dart';
+import 'package:multivendor_ecommerce_app/views/buyers/main_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Brand-Bold',
       ),
-      home: VendorAuthScreen(),
+      home: BuyerRegisterScreen(),
       builder: EasyLoading.init(),
     );
   }

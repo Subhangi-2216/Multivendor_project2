@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multivendor_ecommerce_app/vendor/views/screens/vendor_inner_screen/withdrawal_screen.dart';
 
 class EarningsScreen extends StatelessWidget {
   const EarningsScreen({super.key});
@@ -42,7 +43,7 @@ class EarningsScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Hi ' + data['bussinessName'],
+                        'Hi, ' + data['bussinessName'],
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -149,10 +150,10 @@ class EarningsScreen extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () {
-                            // Navigator.push(context,
-                            //     MaterialPageRoute(builder: (context) {
-                            //   return WithdrawalScreen();
-                            // }));
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return WithdrawalScreen();
+                            }));
                           },
                           child: Container(
                             height: 40,
